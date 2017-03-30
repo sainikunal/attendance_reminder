@@ -3,7 +3,7 @@ from xlrd import open_workbook
 def get_sections():
     """
         Return a dictionary with Days as keys and no. of sections
-        to teach(on that day) as a list
+        to teach(on that day) as a list 
     """
 
     # src = 'C:\\Users\\Program Files\\rptTimeTableFaculty.xls'
