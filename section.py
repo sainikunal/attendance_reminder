@@ -11,7 +11,7 @@ def get_sections():
     src = '/home/mama/Desktop/FacultyUms/rptTimeTableFaculty.xls'
     book = open_workbook(src, on_demand=True)
     sheet = book.sheet_by_name('rptTimeTableFaculty')
-    rows = [8,9,10,11,12,13,14]
+    rows = [8,9,10,11,12,13,14,15]
 
     #  [Mon,Tue,Wed,Thu,Fri,Sat,Sun]
     cols = [3,6,9,11,13,14,18]
@@ -19,15 +19,20 @@ def get_sections():
         11:'Thursday', 13:'Friday', 14:'Saturday',
         18:'Sunday'}
 
+    week_days = ['Monday','Tuesday','Wednesday','Thursday','Friday',
+            'Saturday','Sunday']
+
     section_on_day = {}
     for column in cols:
         c = sheet.col(column)
         desk = []
-        for j in rows:
+        for j in range(len(c)):
             if c[j].value == '' or c[j].value == ' ':
                 continue
             else:
-
+                if c[j].value in week_days:
+                    continue
+                    
                 # Fetch only section name
                 val = c[j].value.split('/')[0].split(':')[1].encode('utf-8')
                 desk.append(val)
