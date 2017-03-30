@@ -12,3 +12,8 @@
    
 This project is useful only for LPU Faculty members. It tells how many sections are left without attendance on that day.
 Date is picked from system clock.
+
+### To execute run the below command
+  ```python
+    python main.py
+  ```
