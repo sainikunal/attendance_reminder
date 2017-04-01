@@ -65,6 +65,7 @@ class Faculty:
     def class_scheduled_held(self):
         pass
 
+    # never used in this project
     def update_time_table_file(self):
         """
             Get the last modified time from file and convert it into month.
@@ -83,6 +84,7 @@ class Faculty:
         else:
             download_time_table(self._usename, self._password, term_id)
 
+    # never used in this project
     def update_term_id_file(self):
         """ 
             Get the last modified time from file and convert it into month.
@@ -154,7 +156,16 @@ class Faculty:
             sys.exit()
     	driver.execute_script(script) 
         submit_button.click()
-         
+        title_after_login = 'Lovely Professional University :: University Management System (UMS)'
+	try:
+	    if driver.title != title_after_login:
+	        print '{:>2}'.format('[*] Login with valid Details.')
+	        driver.close()
+        	sys.exit()
+	except:
+	    print 'Incorrect Details'
+            driver.close()
+	    sys.exit()
 
         driver.get('https://ums.lpu.in/lpuums/Reports/frmClassesPlannedVsActual.aspx')
         date_picker = driver.find_element_by_id('TabContainer1_ReportView_RadDatePicker1_dateInput')
