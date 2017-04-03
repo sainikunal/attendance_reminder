@@ -18,6 +18,9 @@ PLATFORM = sys.platform
 USER = getpass.getuser()
 DEFAULT_PATH = "C:\\Program Files\\"
 
+display = Display()
+display.start()
+
 try:
     list_file = os.listdir(DEFAULT_PATH)
     if 'Class Reminder' in list_file:
@@ -56,51 +59,11 @@ class Faculty:
         content = br.submit()
         title_after_login = 'Lovely Professional University :: University Management System (UMS)'
         if br.title() == title_after_login:
-            
+            print '[*] Login Successful'
             self.get_current_term_id()
             return
         else: 
             print 'Invalid details'
-
-    def class_scheduled_held(self):
-        pass
-
-    # never used in this project
-    def update_time_table_file(self):
-        """
-            Get the last modified time from file and convert it into month.
-            To compare with current month.
-            If there is differnce of 2 months then call download_time_table()
-        """
-        
-        last_modified = os.path.getmtime(DEFAULT_PATH + 'term_id')
-        today = time.localtime(time.time()).tm_mon
-        term_id = ''
-        with open(DEFAULT_PATH + "term_id", "r") as f:
-            term_id = int(f.readline())
-
-        if (last_modified+2) % 12 != today:
-            return
-        else:
-            download_time_table(self._usename, self._password, term_id)
-
-    # never used in this project
-    def update_term_id_file(self):
-        """ 
-            Get the last modified time from file and convert it into month.
-            To compare with current month.
-        """
-        
-        last_modified = time.localtime(os.path.getmtime('term')).tm_mon
-
-        today = time.localtime(time.time()).tm_mon
-
-        # if last_modified is less than 60 days then update it
-        if (last_modified+2) % 12 != today:
-            return
-        else:
-            self.get_current_term_id()
-
 
     def get_current_term_id(self):
         """ 
@@ -110,8 +73,8 @@ class Faculty:
         """
 
         file_list = os.listdir(LINUX_PATH)
-        if 'term_id' in file_list and 'rptTimeTableFaculty.xls' in file_list:
-            print "Returning from get_current_term_id()"
+        if 'project_filesterm_id' in file_list and 'rptTimeTableFaculty.xls' in file_list:
+            print '[*] Time table downloaded'
             return
         
 
@@ -129,13 +92,14 @@ class Faculty:
 
         
     def download_attendance_report(self):
-	    """
+	"""
             prints all sections whose attendance is not marked on that day
             This method finds class on that day, from time table, if no class exists then simply exit,
             if more than one class exists then go to UMS, login with faculty ID, go to attendance report page, 
             and fetch the report of current day, parse html, compare fetched sections with time table,
             It doesn't tells makeup/adjustment classes.
         """
+	print '[*] Getting attendance report'
         option = webdriver.ChromeOptions()
     	option.add_argument('load.strategy=unstable')
     
@@ -156,17 +120,6 @@ class Faculty:
             sys.exit()
     	driver.execute_script(script) 
         submit_button.click()
-        title_after_login = 'Lovely Professional University :: University Management System (UMS)'
-	try:
-	    if driver.title != title_after_login:
-	        print '{:>2}'.format('[*] Login with valid Details.')
-	        driver.close()
-        	sys.exit()
-	except:
-	    print 'Incorrect Details'
-            driver.close()
-	    sys.exit()
-
         driver.get('https://ums.lpu.in/lpuums/Reports/frmClassesPlannedVsActual.aspx')
         date_picker = driver.find_element_by_id('TabContainer1_ReportView_RadDatePicker1_dateInput')
         today = time.localtime(time.time())
